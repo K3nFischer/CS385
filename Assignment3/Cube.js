@@ -3,11 +3,11 @@ function Cube(gl) {
     var program = initShaders(gl, "Cube-vertex-shader", "Cube-fragment-shader");
 
     var positions = [
-        // --> Insert your vertex positions here
+        0,0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,1,1,0,1,1
     ];
     
     var indices = [
-        // --> Insert you index values here
+        0,1,2,0,2,3,1,6,2,1,5,6,5,7,6,5,4,7,2,6,7,2,7,3,4,3,7,4,0,3,4,0,1,4,1,5
     ];
 
     positions.numComponents = 3;
