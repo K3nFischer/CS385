@@ -7,7 +7,7 @@ function Cube(gl) {
     ];
     
     var indices = [
-        0,1,2,0,2,3,1,6,2,1,5,6,5,7,6,5,4,7,2,6,7,2,7,3,4,3,7,4,0,3,4,0,1,4,1,5
+        0,1,2,0,2,3,1,6,2,1,5,6,5,7,6,5,4,7,2,6,7,2,7,3,4,3,7,4,0,3,4,1,0,4,5,1
     ];
 
     positions.numComponents = 3;
@@ -26,6 +26,9 @@ function Cube(gl) {
     MV = gl.getUniformLocation(program, "MV");
     this.MV = mat4();
 
+    P = gl.getUniformLocation(program, "P");
+    this.P = mat4();
+
     this.render = function () {
         gl.useProgram( program );
 
@@ -33,7 +36,8 @@ function Cube(gl) {
         gl.vertexAttribPointer( positions.aPosition, positions.numComponents,
             gl.FLOAT, false, 0, 0 );
 
-        gl.uniformMatrix4fv(MV, false, this.MV);
+        gl.uniformMatrix4fv(MV, false, flatten(this.MV));
+        gl.uniformMatrix4fv(P, false, flatten(this.P));
 
         gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, indices.buffer );
         gl.drawElements( gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
