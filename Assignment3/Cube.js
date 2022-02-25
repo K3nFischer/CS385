@@ -23,13 +23,18 @@ function Cube(gl) {
     positions.aPosition = gl.getAttribLocation( program, "aPosition" );
     gl.enableVertexAttribArray( positions.aPosition );
 
+    MV = gl.getUniformLocation(program, "MV");
+    this.MV = mat4();
+
     this.render = function () {
         gl.useProgram( program );
 
         gl.bindBuffer( gl.ARRAY_BUFFER, positions.buffer );
         gl.vertexAttribPointer( positions.aPosition, positions.numComponents,
             gl.FLOAT, false, 0, 0 );
- 
+
+        gl.uniformMatrix4fv(MV, false, this.MV);
+
         gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, indices.buffer );
         gl.drawElements( gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
     }
