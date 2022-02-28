@@ -10,6 +10,8 @@ function init() {
     gl.clearColor(0, .5, .5, 1);
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK_FACE);
 
     cube = new Cube(gl);
 
