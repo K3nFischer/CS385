@@ -21,7 +21,8 @@ function render() {
 
     angle += 1;
     cube.MV = rotate(angle, [1,1,1]);
-    cube.P = perspective(90, 1, 1, 2);
+    cube.P = perspective(45, 1, 1, 10);
+    cube.V = lookAt(vec3(0,0,4),vec3(0,0,-1),vec3(0,1,0));
 
     cube.render();
 

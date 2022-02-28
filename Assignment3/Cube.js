@@ -29,6 +29,9 @@ function Cube(gl) {
     P = gl.getUniformLocation(program, "P");
     this.P = mat4();
 
+    V = gl.getUniformLocation(program, "V");
+    this.V = mat4();
+
     this.render = function () {
         gl.useProgram( program );
 
@@ -38,6 +41,7 @@ function Cube(gl) {
 
         gl.uniformMatrix4fv(MV, false, flatten(this.MV));
         gl.uniformMatrix4fv(P, false, flatten(this.P));
+        gl.uniformMatrix4fv(V, false, flatten(this.V));
 
         gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, indices.buffer );
         gl.drawElements( gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
