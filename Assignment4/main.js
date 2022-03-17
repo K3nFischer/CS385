@@ -42,11 +42,15 @@ function render() {
     var V = translate(0.0, 0.0, -0.5*(10 + 30))
     ms.load(V)
 
+    // Sun stack
+
     ms.push();
     ms.scale(3);
     Sun.MV = ms.current();
     Sun.render();
     ms.pop();
+
+    // Earth stack
 
     ms.push();
     ms.rotate(year, vec3(0, 0, 1));
@@ -57,6 +61,8 @@ function render() {
     Earth.MV = ms.current();
     Earth.render();
     ms.pop();
+
+    // Moon stack
 
     ms.translate(4, 0, 0);
     ms.scale(1);
