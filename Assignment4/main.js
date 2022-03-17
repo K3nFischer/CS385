@@ -32,7 +32,7 @@ function render() {
 
     // Update your motion variables here
     year = Date.now() / 1000;
-    day = Date.now() /1000;
+    day = Date.now() /1000 * 13;
 
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     
