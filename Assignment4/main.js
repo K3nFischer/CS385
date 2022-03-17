@@ -18,8 +18,6 @@ function init() {
     Earth.color = vec4(0, .2, 1, 1);
     Moon.color = vec4(.2, .2, .2, 1);
 
-    year = day = 0;
-
     P = perspective(73.74, 1, 1, 31);
 
     Sun.P = P;
@@ -33,8 +31,8 @@ function init() {
 function render() {
 
     // Update your motion variables here
-    year++;
-    day++;
+    year = Date.now() / 1000;
+    day = Date.now() /1000;
 
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     
@@ -53,8 +51,8 @@ function render() {
     ms.push();
     ms.rotate(year, vec3(0, 0, 1));
     ms.translate(10, 0, 0);
-    ms.push();
     ms.rotate(day, vec3(0, 0, 1));
+    ms.push();
     ms.scale(2);
     Earth.MV = ms.current();
     Earth.render();
