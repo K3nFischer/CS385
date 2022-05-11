@@ -2,25 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>My first three.js app</title>
+    <title>CS385 Final Project</title>
     <style>
       body { margin: 0; }
     </style>
   </head>
   <body>
     <script src="node_modules/three/build/three.js"></script>
+    <script src="node_modules/three/examples/js/loaders/GLTFLoader.js"></script>
     <script>
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      const loader = new THREE.GLTFLoader();
+
 
       const renderer = new THREE.WebGLRenderer();
       renderer.setSize( window.innerWidth, window.innerHeight );
       document.body.appendChild( renderer.domElement );
 
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshPhongMaterial( { color: 0x44aa88 } );
-      const cube = new THREE.Mesh( geometry, material );
-      scene.add( cube );
+
+      loader.load( 'Models/thompson_submachine_gun/scene.gltf', function ( gltf ) {
+          scene.add( gltf.scene );
+      }, undefined, function ( error ) {
+          console.error( error );
+      });
+
 
       const color = 0xFFFFFF;
       const intensity = 1;
@@ -31,8 +37,6 @@
       camera.position.z = 5;
 
       function animate() {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
 
         renderer.render( scene, camera );
         requestAnimationFrame( animate );
