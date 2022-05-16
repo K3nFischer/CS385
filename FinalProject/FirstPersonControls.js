@@ -1,4 +1,4 @@
-import * as THREE from './node_modules/three/src/Three.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.136';
 
 const KEYS = {
     'a': 65,

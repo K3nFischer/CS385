@@ -1,5 +1,19 @@
-import * as THREE from './node_modules/three/src/Three.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.136';
 import FirstPersonCamera from './FirstPersonControls.js';
+import {GLTFLoader} from 'https://cdn.skypack.dev/three@0.136/examples/jsm/loaders/GLTFLoader.js';
+
+async function loadModels() {
+    const loader = new GLTFLoader();
+    let gun = null;
+    loader.load('./Models/thompson_submachine_gun/scene.gltf', function( gltf ) {
+        gun = gltf.scene;
+    }, undefined, function ( error ) {
+
+        console.error( error );
+
+    } )
+    return gun;
+}
 
 class FirstPersonCameraDemo {
     constructor() {
@@ -23,9 +37,7 @@ class FirstPersonCameraDemo {
     }
 
     initializeRenderer() {
-        this.threejs = new THREE.WebGLRenderer({
-            antialias: false,
-        });
+        this.threejs = new THREE.WebGLRenderer();
         this.threejs.shadowMap.enabled = true;
         this.threejs.shadowMap.type = THREE.PCFSoftShadowMap;
         this.threejs.setPixelRatio(window.devicePixelRatio);
@@ -76,6 +88,8 @@ class FirstPersonCameraDemo {
         checkerboard.repeat.set(32, 32);
         checkerboard.encoding = THREE.sRGBEncoding;
 
+        const floorMaterial = this.loadMaterial('hardwood-brown-planks-', 8);
+
         const plane = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100, 10, 10),
             new THREE.MeshStandardMaterial({map: checkerboard}));
@@ -96,7 +110,7 @@ class FirstPersonCameraDemo {
 
         const wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(100, 100, 4),
-            concreteMaterial);
+            floorMaterial);
         wall1.position.set(0, -40, -50);
         wall1.castShadow = true;
         wall1.receiveShadow = true;
@@ -104,7 +118,7 @@ class FirstPersonCameraDemo {
 
         const wall2 = new THREE.Mesh(
             new THREE.BoxGeometry(100, 100, 4),
-            concreteMaterial);
+            floorMaterial);
         wall2.position.set(0, -40, 50);
         wall2.castShadow = true;
         wall2.receiveShadow = true;
@@ -112,7 +126,7 @@ class FirstPersonCameraDemo {
 
         const wall3 = new THREE.Mesh(
             new THREE.BoxGeometry(4, 100, 100),
-            concreteMaterial);
+            floorMaterial);
         wall3.position.set(50, -40, 0);
         wall3.castShadow = true;
         wall3.receiveShadow = true;
@@ -120,7 +134,7 @@ class FirstPersonCameraDemo {
 
         const wall4 = new THREE.Mesh(
             new THREE.BoxGeometry(4, 100, 100),
-            concreteMaterial);
+            floorMaterial);
         wall4.position.set(-50, -40, 0);
         wall4.castShadow = true;
         wall4.receiveShadow = true;
@@ -140,25 +154,21 @@ class FirstPersonCameraDemo {
         }
 
         // Crosshair
-        const crosshair = mapLoader.load('Textures/crosshair.png');
+        const crosshair = mapLoader.load('Textures/customcrosshair.png');
         crosshair.anisotropy = maxAnisotropy;
 
         this.sprite = new THREE.Sprite(
             new THREE.SpriteMaterial({map: crosshair, color: 0xffffff, fog: false, depthTest: false, depthWrite: false}));
-        this.sprite.scale.set(0.15, 0.15 * this.camera.aspect, 1)
+        this.sprite.scale.set(0.08, 0.08 * this.camera.aspect, 1)
         this.sprite.position.set(0, 0, -10);
 
         this.uiScene.add(this.sprite);
     }
 
     initializeLights() {
-        const distance = 50.0;
-        const angle = Math.PI / 4.0;
-        const penumbra = 0.5;
-        const decay = 1.0;
-
-        let light = new THREE.SpotLight(
-            0xFFFFFF, 100.0, distance, angle, penumbra, decay);
+        let light = new THREE.DirectionalLight(
+            0xFFFFFF, 1);
+        light.position.set(20,50, 0);
         light.castShadow = true;
         light.shadow.bias = -0.00001;
         light.shadow.mapSize.width = 4096;
@@ -229,7 +239,7 @@ class FirstPersonCameraDemo {
         this.uiCamera.right = this.camera.aspect;
         this.uiCamera.updateProjectionMatrix();
 
-        this.threej.setSize(window.innerWidth, window.innerHeight);
+        this.threejs.setSize(window.innerWidth, window.innerHeight);
     }
 
     raf() {
@@ -237,7 +247,6 @@ class FirstPersonCameraDemo {
             if (this.previousRAF === null) {
                 this.previousRAF = t;
             }
-
             this.step(t - this.previousRAF);
             this.threejs.autoClear = true;
             this.threejs.render(this.scene, this.camera);
@@ -253,7 +262,6 @@ class FirstPersonCameraDemo {
         this.fpsCamera.update(timeElapsedS);
     }
 }
-
 
 let APP = null;
 
