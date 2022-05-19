@@ -78,36 +78,54 @@ function initializeScene() {
 
     const mapLoader = new THREE.TextureLoader();
     const maxAnisotropy = threejs.capabilities.getMaxAnisotropy();
-    const checkerboard = mapLoader.load('Textures/checkerboard.png');
-    checkerboard.anisotropy = maxAnisotropy;
-    checkerboard.wrapS = THREE.RepeatWrapping;
-    checkerboard.wrapT = THREE.RepeatWrapping;
-    checkerboard.repeat.set(32, 32);
-    checkerboard.encoding = THREE.sRGBEncoding;
 
     const floorMaterial = loadMaterial('hardwood-brown-planks-', 8);
+    const brickMaterial = loadMaterial('dirty-red-bricks_', 12);
+    const boxMaterial = loadMaterial('woodframe1-', 1);
 
     const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(100, 100, 10, 10),
-        new THREE.MeshStandardMaterial({map: checkerboard}));
+        new THREE.PlaneGeometry(100, 100, 20, 20),
+        floorMaterial);
     plane.castShadow = false;
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
     scene.add(plane);
 
     const box = new THREE.Mesh(
-        new THREE.BoxGeometry(4, 4, 4),
-        loadMaterial('vintage-tile1_', 0.2));
-    box.position.set(10, 2, 0);
+        new THREE.BoxGeometry(2, 2, 2),
+        boxMaterial);
+    box.position.set(10, 1, 0);
     box.castShadow = true;
     box.receiveShadow = true;
     scene.add(box);
 
-    //const concreteMaterial = loadMaterial('concrete3-', 4);
+    const box2 = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        boxMaterial);
+    box2.position.set(3, 1, 12);
+    box2.castShadow = true;
+    box2.receiveShadow = true;
+    scene.add(box2);
+
+    const box3 = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        boxMaterial);
+    box3.position.set(-8, 1, 0);
+    box3.castShadow = true;
+    box3.receiveShadow = true;
+    scene.add(box3);
+
+    const box4 = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        boxMaterial);
+    box4.position.set(0, 1, -5);
+    box4.castShadow = true;
+    box4.receiveShadow = true;
+    scene.add(box4);
 
     const wall1 = new THREE.Mesh(
         new THREE.BoxGeometry(100, 100, 4),
-        floorMaterial);
+        brickMaterial);
     wall1.position.set(0, -40, -50);
     wall1.castShadow = true;
     wall1.receiveShadow = true;
@@ -115,7 +133,7 @@ function initializeScene() {
 
     const wall2 = new THREE.Mesh(
         new THREE.BoxGeometry(100, 100, 4),
-        floorMaterial);
+        brickMaterial);
     wall2.position.set(0, -40, 50);
     wall2.castShadow = true;
     wall2.receiveShadow = true;
@@ -123,7 +141,7 @@ function initializeScene() {
 
     const wall3 = new THREE.Mesh(
         new THREE.BoxGeometry(4, 100, 100),
-        floorMaterial);
+        brickMaterial);
     wall3.position.set(50, -40, 0);
     wall3.castShadow = true;
     wall3.receiveShadow = true;
@@ -131,7 +149,7 @@ function initializeScene() {
 
     const wall4 = new THREE.Mesh(
         new THREE.BoxGeometry(4, 100, 100),
-        floorMaterial);
+        brickMaterial);
     wall4.position.set(-50, -40, 0);
     wall4.castShadow = true;
     wall4.receiveShadow = true;
@@ -140,7 +158,7 @@ function initializeScene() {
     // Create Box3 for each mesh in the scene so that we can
     // do some easy intersection tests.
     const meshes = [
-        plane, box, wall1, wall2, wall3, wall4];
+        plane, box, box2, box3, box4, wall1, wall2, wall3, wall4];
 
     objects = [];
 
@@ -165,25 +183,25 @@ function initializeScene() {
 function initializeLights() {
     let light = new THREE.DirectionalLight(
         0xFFFFFF, 1);
-    light.position.set(20,50, 0);
     light.castShadow = true;
     light.shadow.bias = -0.00001;
     light.shadow.mapSize.width = 4096;
     light.shadow.mapSize.height = 4096;
-    light.shadow.camera.near = 1;
-    light.shadow.camera.far = 100;
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 500;
+    light.shadow.camera.left = -500;
+    light.shadow.camera.bottom = -500;
+    light.shadow.camera.right = 500;
+    light.shadow.camera.top = 500;
 
-    light.position.set(25, 25, 0);
-    light.lookAt(0, 0, 0);
+    light.position.set(150, 50, 45);
     scene.add(light);
 
-    const upColour = 0xFFFF80;
-    const downColour = 0x808080;
-    light = new THREE.HemisphereLight(upColour, downColour, 0.5);
-    light.color.setHSL( 0.6, 1, 0.6 );
-    light.groundColor.setHSL( 0.095, 1, 0.75 );
-    light.position.set(0, 4, 0);
-    scene.add(light);
+
+    const upColour = 0xFFBB69;
+    const downColour = 0x5E5E5E;
+    let lightHemisphere = new THREE.HemisphereLight(upColour, downColour, 1);
+    scene.add(lightHemisphere);
 }
 
 function loadMaterial(name, tiling) {
